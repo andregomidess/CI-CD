@@ -8,7 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node-version: [16, 18, 20]
 
     steps:
       - name: Checkout repository
@@ -17,8 +22,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4.0.2
         with:
-          node-version: ${{ vars.NODE_VERSION }}  
-          
+          node-version: ${{ matrix.node-version }}
+
       - name: Install dependencies
         run: npm install
 
@@ -26,9 +31,10 @@ jobs:
         run: npm run build
 
       - name: Archive production artifacts
+        if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: build-artifacts
+          name: build-artifacts-${{ matrix.os }}-node-${{ matrix.node-version }}
           path: .
           retention-days: ${{ vars.RETENTION_DAYS }}
 
@@ -40,7 +46,7 @@ jobs:
       - name: Download production artifacts
         uses: actions/download-artifact@v4.1.7
         with:
-          name: build-artifacts
+          name: build-artifacts-ubuntu-latest-node-20
           path: .  
 
       - name: Deploy to Azure Functions
