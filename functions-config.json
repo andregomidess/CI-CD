@@ -1,0 +1,13 @@
+[
+    {
+      "function-name": "name-1",
+      "slot-name": "production",
+      "publish-profile": "NOME_PROFILE_1"
+    },
+    {
+      "function-name": "name-2",
+      "slot-name": "production",
+      "publish-profile": "NOME_PROFILE_2"
+    }
+  ]
+  
